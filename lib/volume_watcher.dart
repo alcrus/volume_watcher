@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class VolumeWatcher extends StatefulWidget {
-  final Function(double) onVolumeChangeListener;
-  final Widget child;
+  final Function(double)? onVolumeChangeListener;
+  final Widget? child;
 
   VolumeWatcher({
-    Key key,
-    @required this.onVolumeChangeListener,
+    Key? key,
+    required this.onVolumeChangeListener,
     this.child,
   }) : super(key: key) {
     assert(this.onVolumeChangeListener != null);
@@ -19,13 +19,13 @@ class VolumeWatcher extends StatefulWidget {
 
   static const MethodChannel methodChannel = const MethodChannel('volume_watcher_method');
   static const EventChannel eventChannel = const EventChannel('volume_watcher_event');
-  static StreamSubscription _subscription;
-  static Map<int, Function> _events = {};
+  static StreamSubscription? _subscription;
+  static Map<int, Function?> _events = {};
 
   /*
    * event channel回调
    */
-  static void _onEvent(Object event) {
+  static void _onEvent(dynamic event) {
     _events.values.forEach((item) {
       if (item != null) {
         item(event);
@@ -42,7 +42,7 @@ class VolumeWatcher extends StatefulWidget {
 
   /// 添加监听器
   /// 返回id, 用于删除监听器使用
-  static int addListener(Function onEvent) {
+  static int? addListener(Function? onEvent) {
     if (_subscription == null) {
       //event channel 注册
       _subscription = eventChannel.receiveBroadcastStream('init').listen(_onEvent, onError: _onError);
@@ -59,7 +59,7 @@ class VolumeWatcher extends StatefulWidget {
   }
 
   /// 删除监听器
-  static void removeListener(int id) {
+  static void removeListener(int? id) {
     if (id != null) {
       _events.remove(id);
     }
@@ -112,7 +112,7 @@ class VolumeWatcher extends StatefulWidget {
 }
 
 class VolumeState extends State<VolumeWatcher> {
-  int _listenerId;
+  int? _listenerId;
 
   @override
   void initState() {
